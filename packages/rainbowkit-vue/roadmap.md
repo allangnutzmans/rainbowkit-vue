@@ -1,0 +1,9 @@
+- REFACTOR ALL
+- REFACTOR THE FAKE INJECTS FOR composables
+- [ ] Check RainbowKitProvider folder need for refactor
+- [ ] Unit tests for all components (props, events, rendering)
+- [ ] Integration tests for flows and conte t
+- [ ] Manual/visual testing with Storybook or a playground app
+- [ ] E2E tests for full user journeys (optional, but recommended)
+- [ ] Mocks/stubs for wallet, chain, and i18n conte t
+- [ ] Automated CI to run all tests

@@ -111,3 +111,6 @@ dist
 # Others
 .DS_Store
 node-compile-cache/
+
+# Webstorm files
+.idea/

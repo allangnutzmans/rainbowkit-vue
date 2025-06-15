@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2019",
+    "preserveSymlinks": false,
+    "declaration": true,
+    "declarationDir": "dist",
+    "jsx": "preserve",
+    "outDir": "dist",
+    "types": ["vitest/globals", "vite/client"]
+  },
+  "exclude": ["node_modules"],
+  "include": ["src", "assets.d.ts"]
+}
