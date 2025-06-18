@@ -8,8 +8,8 @@ import AsyncImage from '../AsyncImage/AsyncImage.vue';
 import Box from '../Box/Box.vue';
 import ActionButton from '../Button/ActionButton.vue';
 import CloseButton from '../CloseButton/CloseButton.vue';
-import { useAuthenticationAdapter } from '../RainbowKitProvider/AuthenticationContext';
-import { useI18nContext } from '../RainbowKitProvider/useI18nContext';
+import { useAuthenticationAdapter } from '../RainbowKitPlugin/AuthenticationContext';
+import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
 import Text from '../Text/Text.vue';
 
 const props = defineProps<{

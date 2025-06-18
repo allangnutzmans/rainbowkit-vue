@@ -1,5 +1,5 @@
 import { useAccount } from '@wagmi/vue';
-import { useChainId } from '../hooks/useChainId';
+import { useChainId } from '../composables/useChainId';
 import { useTransactionStore } from './TransactionStoreContext';
 
 export function useClearRecentTransactions() {

@@ -1,9 +1,9 @@
 import { mainnet } from 'viem/chains';
-import { useRainbowKitChains } from '../components/RainbowKitProvider/RainbowKitChainContext';
-import { computed, Ref } from 'vue';
+import { useRainbowKitChain } from '../components/RainbowKitPlugin/useRainbowKitChainContext';
+import { computed } from 'vue';
 
 export function useIsMainnetConfigured() {
-  const rainbowKitChains = useRainbowKitChains() as unknown as Ref<any[]>;
+  const rainbowKitChains = useRainbowKitChain();
   const chainId = mainnet.id;
   return computed(() =>
     rainbowKitChains.value.some(

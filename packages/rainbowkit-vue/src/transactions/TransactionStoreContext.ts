@@ -1,12 +1,13 @@
 import { provide, inject, ref, watch, onMounted, onUnmounted, Ref } from 'vue';
 import type { PublicClient, TransactionReceipt } from 'viem';
 import { useAccount, useBalance } from '@wagmi/vue';
-import { useChainId } from '../hooks/useChainId';
-import { usePublicClient } from '../composables/usePublicClient';
+import { useChainId } from '../composables/useChainId';
+//import { usePublicClient } from '../composables/usePublicClient'; //TODO FIX THIS
 import {
   type TransactionStore,
   createTransactionStore,
 } from './transactionStore';
+import {usePublicClient} from "wagmi";
 
 // Only allow a single instance of the store to exist at once
 // so that multiple RainbowKitProvider instances can share the same store.

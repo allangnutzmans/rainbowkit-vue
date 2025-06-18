@@ -1,11 +1,11 @@
-import { type Config, type Connector, useConnect } from 'wagmi';
+import { type Config, type Connector, useConnect } from '@wagmi/vue';
 import type { ConnectMutateAsync } from 'wagmi/query';
-import { useWalletConnectOpenState } from '../components/RainbowKitProvider/ModalContext';
+import { useWalletConnectOpenState } from '../components/RainbowKitPlugin/useModal';
 import { indexBy } from '../utils/indexBy';
 import {
   useInitialChainId,
-  useRainbowKitChains,
-} from './../components/RainbowKitProvider/RainbowKitChainContext';
+  useRainbowKitChain,
+} from '../components/RainbowKitPlugin/useRainbowKitChainContext';
 import type { WagmiConnectorInstance, WalletInstance } from './Wallet';
 import {
   getDesktopDownloadUrl,
@@ -37,7 +37,7 @@ export interface WalletConnector extends WalletInstance {
 export function useWalletConnectors(
   mergeEIP6963WithRkConnectors = false,
 ): WalletConnector[] {
-  const rainbowKitChains = useRainbowKitChains();
+  const rainbowKitChains = useRainbowKitChain();
   const intialChainId = useInitialChainId();
   const { connectAsync, connectors: defaultConnectors_untyped } = useConnect();
   const defaultCreatedConnectors =

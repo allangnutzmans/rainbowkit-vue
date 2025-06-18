@@ -1,5 +1,5 @@
 import { useAccount } from '@wagmi/vue';
-import { useAuthenticationStatus } from '../components/RainbowKitProvider/AuthenticationContext';
+import { useAuthenticationStatus } from '../components/RainbowKitPlugin/useAuthentication';
 import { computed } from 'vue';
 
 export type ConnectionStatus =

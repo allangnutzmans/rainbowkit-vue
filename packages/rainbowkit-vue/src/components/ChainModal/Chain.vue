@@ -5,9 +5,9 @@ import AsyncImage from '../AsyncImage/AsyncImage.vue';
 import type { AsyncImageSrc } from '../AsyncImage/useAsyncImage';
 import Box from '../Box/Box.vue';
 import MenuButton from '../MenuButton/MenuButton.vue';
-import { useI18nContext } from '../RainbowKitProvider/useI18nContext';
-import { useRainbowKitChains } from '../RainbowKitProvider/useRainbowKitChains';
+import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
 import Text from '../Text/Text.vue';
+import {useRainbowKitChain} from "../RainbowKitPlugin/useRainbowKitChainContext";
 
 interface ChainProps {
   chainId: number;
@@ -25,7 +25,7 @@ const props = defineProps<ChainProps>();
 
 const mobile = isMobile();
 const { i18n } = useI18nContext();
-const rainbowkitChains = useRainbowKitChains();
+const rainbowkitChains = useRainbowKitChain();
 
 const isCurrentChain = computed(() => props.currentChainId === props.chainId);
 

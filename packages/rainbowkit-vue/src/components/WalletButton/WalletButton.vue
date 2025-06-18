@@ -4,7 +4,7 @@ import { touchableStyles } from '../../css/touchableStyles';
 import AsyncImage from '../AsyncImage/AsyncImage.vue';
 import Box from '../Box/Box.vue';
 import SpinnerIcon from '../Icons/Spinner.vue';
-import { useI18nContext } from '../RainbowKitProvider/useI18nContext';
+import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
 import * as styles from './WalletButton.css';
 import WalletButtonRenderer from './WalletButtonRenderer.vue';
 

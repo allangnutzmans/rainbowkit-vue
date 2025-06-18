@@ -9,8 +9,8 @@ import { formatENS } from '../ConnectButton/formatENS';
 import CopiedIcon from '../Icons/CopiedIcon.vue';
 import CopyIcon from '../Icons/CopyIcon.vue';
 import DisconnectIcon from '../Icons/DisconnectIcon.vue';
-import { useI18nContext } from '../RainbowKitProvider/useI18nContext';
-import { useShowRecentTransactionsContext } from '../RainbowKitProvider/useShowRecentTransactionsContext';
+import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
+import { useShowRecentTransactionsContext } from '../RainbowKitPlugin/useShowRecentTransactionsContext';
 import Text from '../Text/Text.vue';
 import TxList from '../Txs/TxList.vue';
 import ProfileDetailsAction from './ProfileDetailsAction.vue';
@@ -18,12 +18,12 @@ import { isMobile } from '../../utils/isMobile';
 
 const props = defineProps<{
   address: string;
-  ensAvatar?: string;
-  ensName?: string;
+  ensAvatar?: string | null;
+  ensName?: string | null;
   balance?: { formatted: string; symbol: string };
-  onClose: () => void;
-  onDisconnect: () => void;
 }>();
+
+const emit = defineEmits(['close', 'disconnect']);
 
 const showRecentTransactions = useShowRecentTransactionsContext();
 const copiedAddress = ref(false);
@@ -78,7 +78,7 @@ watch(copiedAddress, (val) => {
             willChange: 'transform',
           }"
         >
-          <CloseButton :onClose="props.onClose" />
+          <CloseButton @close="emit('close')" />
         </Box>
         <Box :marginTop="mobile ? '24' : '0'">
           <Avatar
@@ -132,7 +132,7 @@ watch(copiedAddress, (val) => {
             : i18n.t('profile.copy_address.label')"
         />
         <ProfileDetailsAction
-          :action="props.onDisconnect"
+          @action="emit('disconnect')"
           :icon="h(DisconnectIcon)"
           :label="i18n.t('profile.disconnect.label')"
           testId="disconnect-button"

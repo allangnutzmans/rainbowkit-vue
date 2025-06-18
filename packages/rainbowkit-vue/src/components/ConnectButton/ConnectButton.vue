@@ -2,16 +2,16 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { mapResponsiveValue, normalizeResponsiveValue } from '../../css/sprinkles.css';
 import { touchableStyles } from '../../css/touchableStyles';
-import { useConnectionStatus } from '../../hooks/useConnectionStatus';
+import { useConnectionStatus } from '../../composables/useConnectionStatus';
 import { isMobile } from '../../utils/isMobile';
 import AsyncImage from '../AsyncImage/AsyncImage.vue';
 import Avatar from '../Avatar/Avatar.vue';
 import Box from '../Box/Box.vue';
-import DropdownIcon from '../Icons/Dropdown.vue';
-import { useI18nContext } from '../RainbowKitProvider/useI18nContext';
-import { useRainbowKitChains } from '../RainbowKitProvider/useRainbowKitChains';
-import { useShowBalance } from '../RainbowKitProvider/useShowBalance';
+import DropdownIcon from '../Icons/DropdownIcon.vue';
+import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
+import { useShowBalance } from '../RainbowKitPlugin/useShowBalance';
 import ConnectButtonRenderer from './ConnectButtonRenderer.vue';
+import {useRainbowKitChain} from "../RainbowKitPlugin/useRainbowKitChainContext";
 
 type AccountStatus = 'full' | 'avatar' | 'address';
 type ChainStatus = 'full' | 'icon' | 'name' | 'none';
@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<{
   showBalance: () => ({ largeScreen: true, smallScreen: false }),
 });
 
-const chains = useRainbowKitChains();
+const chains = useRainbowKitChain();
 const connectionStatus = useConnectionStatus();
 const { setShowBalance } = useShowBalance();
 const ready = ref(false);
@@ -123,7 +123,7 @@ onMounted(() => {
               <DropdownIcon />
             </Box>
           </template>
-          <template v-if="!chain.unsupported">
+          <template v-if="!chain?.unsupported">
             <Box
               alignItems="center"
               as="button"

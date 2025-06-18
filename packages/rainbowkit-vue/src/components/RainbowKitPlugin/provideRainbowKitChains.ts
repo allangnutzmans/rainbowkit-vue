@@ -1,5 +1,5 @@
 import { isNotNullish } from '../../utils/isNotNullish';
-import type { RainbowKitChain } from './RainbowKitChainContext';
+import {RainbowKitChain} from "./useRainbowKitChainContext";
 
 // Sourced from https://github.com/wevm/viem/tree/main/src/chains/definitions
 // This is just so we can clearly see which of wagmi's first-class chains we provide metadata for

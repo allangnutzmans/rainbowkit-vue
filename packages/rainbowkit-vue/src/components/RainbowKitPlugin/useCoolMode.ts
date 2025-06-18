@@ -1,6 +1,5 @@
-import { useContext, useEffect, useRef } from 'react';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useAsyncImage } from '../AsyncImage/useAsyncImage';
-import { CoolModeContext } from './CoolModeContext';
 
 interface Particle {
   direction: number;
@@ -14,18 +13,30 @@ interface Particle {
   top: number;
 }
 
-export const useCoolMode = (imageUrl: string | (() => Promise<string>)) => {
-  const ref = useRef<HTMLElement>(null);
-  const coolModeEnabled = useContext(CoolModeContext);
+export const useCoolMode = (
+  imageUrl: string | (() => Promise<string>),
+  coolModeEnabled: boolean,
+) => {
+  const elRef = ref<HTMLElement | null>(null);
   const resolvedImageUrl = useAsyncImage(imageUrl);
+  let cleanup: (() => void) | undefined;
 
-  useEffect(() => {
-    if (coolModeEnabled && ref.current && resolvedImageUrl) {
-      return makeElementCool(ref.current, resolvedImageUrl);
+  const tryActivate = () => {
+    if (coolModeEnabled && elRef.value && resolvedImageUrl.value) {
+      cleanup = makeElementCool(elRef.value, resolvedImageUrl.value);
+    } else if (cleanup) {
+      cleanup();
+      cleanup = undefined;
     }
-  }, [coolModeEnabled, resolvedImageUrl]);
+  };
 
-  return ref;
+  onMounted(tryActivate);
+  onUnmounted(() => {
+    if (cleanup) cleanup();
+  });
+  watch([resolvedImageUrl, () => coolModeEnabled, elRef], tryActivate);
+
+  return elRef;
 };
 
 const getContainer = () => {

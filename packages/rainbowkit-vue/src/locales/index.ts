@@ -42,8 +42,8 @@ export type Locale =
   | 'zh-Hant';
 
 export const i18n = new I18n({
-  en: JSON.parse(en_US as any),
-  'en-US': JSON.parse(en_US as any),
+    en: en_US,
+    'en-US': en_US,
 });
 
 i18n.defaultLocale = 'en-US';

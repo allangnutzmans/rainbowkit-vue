@@ -255,4 +255,6 @@ export const sprinkles = createSprinkles(
     responsiveProperties,
     unresponsiveProperties,
 );
-export type Sprinkles = Parameters<typeof sprinkles>[0];
+
+//@ts-ignore // vue transpiler bug ROLLBACK TO BUILD TODO
+//export type Sprinkles = Parameters<typeof sprinkles>[0];

@@ -274,7 +274,6 @@ export const sprinkles = createSprinkles(
   motionSafeProperties,
   interactionProperties,
 );
-export type Sprinkles = Parameters<typeof sprinkles>[0];
 
 export type OptionalResponsiveValue<Value extends string | number> =
   ConditionalValue<typeof responsiveProperties, Value>;

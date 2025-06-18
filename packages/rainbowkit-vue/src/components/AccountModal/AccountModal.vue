@@ -2,7 +2,7 @@
 import Dialog from "../Dialog/Dialog.vue";
 import DialogContent from "../Dialog/DialogContent.vue";
 import {useAccount, useDisconnect} from "@wagmi/vue";
-import {useProfile} from "../../hooks/useProfile";
+import {useProfile} from "../../composables/useProfile";
 import ProfileDetails from "../ProfileDetails/ProfileDetails.vue";
 
 const props = defineProps<{

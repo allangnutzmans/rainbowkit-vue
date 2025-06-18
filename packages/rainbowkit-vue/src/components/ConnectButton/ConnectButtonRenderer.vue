@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { computed, useSlots, inject } from 'vue';
-import { useAccount, useConfig } from 'wagmi';
+import {computed, useSlots, inject, onMounted, ref, onUnmounted} from 'vue';
+import { useAccount, useConfig } from '@wagmi/vue';
 import { normalizeResponsiveValue } from '../../css/sprinkles.css';
-import { useProfile } from '../../hooks/useProfile';
+import { useProfile } from '../../composables/useProfile';
 import { useRecentTransactions } from '../../transactions/useRecentTransactions';
 import { isMobile } from '../../utils/isMobile';
 import { useAsyncImage } from '../AsyncImage/useAsyncImage';
-import { useAuthenticationStatus } from '../RainbowKitProvider/AuthenticationContext';
-import { useAccountModal, useChainModal, useConnectModal, useModalState } from '../RainbowKitProvider/ModalContext';
-import { useRainbowKitChainsById } from '../RainbowKitProvider/RainbowKitChainContext';
-import { useShowBalance } from '../RainbowKitProvider/ShowBalanceContext';
-import { ShowRecentTransactionsContext } from '../RainbowKitProvider/ShowRecentTransactionsContext';
+import { useAuthenticationStatus } from '../RainbowKitPlugin/useAuthentication';
+import { useAccountModal, useChainModal, useConnectModal, useModalState } from '../RainbowKitPlugin/useModal';
+import { useRainbowKitChainsById } from '../RainbowKitPlugin/useRainbowKitChainContext';
+import { useShowBalance } from '../RainbowKitPlugin/useShowBalance';
 import { abbreviateETHBalance } from './abbreviateETHBalance';
 import { formatAddress } from './formatAddress';
 import { formatENS } from './formatENS';
+import {showRecentTransactions} from "../../composables/useGlobal";
 
 const slots = useSlots();
 
@@ -28,9 +28,8 @@ const chainIconUrl = computed(() => rainbowKitChain.value?.iconUrl ?? undefined)
 const chainIconBackground = computed(() => rainbowKitChain.value?.iconBackground ?? undefined);
 const resolvedChainIconUrl = useAsyncImage(chainIconUrl);
 
-const showRecentTransactions = inject(ShowRecentTransactionsContext, false);
 const hasPendingTransactions = computed(() =>
-  useRecentTransactions().some(({ status }) => status === 'pending') && showRecentTransactions
+  useRecentTransactions().value.some(({ status }) => status === 'pending') && showRecentTransactions
 );
 
 const { showBalance } = useShowBalance();
@@ -47,13 +46,13 @@ function computeShouldShowBalance() {
 const shouldShowBalance = computed(computeShouldShowBalance);
 
 const { balance, ensAvatar, ensName } = useProfile({
-  address,
+  address: address.value,
   includeBalance: shouldShowBalance.value,
 });
 
 const displayBalance = computed(() =>
-  balance.value
-    ? `${abbreviateETHBalance(Number.parseFloat(balance.value.formatted))} ${balance.value.symbol}`
+  balance?.value
+    ? `${abbreviateETHBalance(Number.parseFloat(balance?.value.formatted))} ${balance.value.symbol}`
     : undefined
 );
 
@@ -62,17 +61,25 @@ const { openChainModal } = useChainModal();
 const { openAccountModal } = useAccountModal();
 const { accountModalOpen, chainModalOpen, connectModalOpen } = useModalState();
 
+const isMounted = ref(false);
+onMounted(() => {
+  isMounted.value = true;
+})
+onUnmounted(() => {
+  isMounted.value = false;
+})
+
 const renderProps = computed(() => ({
   account: address.value
     ? {
         address: address.value,
-        balanceDecimals: balance.value?.decimals,
-        balanceFormatted: balance.value?.formatted,
-        balanceSymbol: balance.value?.symbol,
+        balanceDecimals: balance?.value?.decimals,
+        balanceFormatted: balance?.value?.formatted,
+        balanceSymbol: balance?.value?.symbol,
         displayBalance: displayBalance.value,
-        displayName: ensName.value ? formatENS(ensName.value) : formatAddress(address.value),
-        ensAvatar: ensAvatar.value ?? undefined,
-        ensName: ensName.value ?? undefined,
+        displayName: ensName?.value ? formatENS(ensName?.value) : formatAddress(address.value),
+        ensAvatar: ensAvatar?.value ?? undefined,
+        ensName: ensName?.value ?? undefined,
         hasPendingTransactions: hasPendingTransactions.value,
       }
     : undefined,
@@ -90,7 +97,7 @@ const renderProps = computed(() => ({
     : undefined,
   chainModalOpen: chainModalOpen.value,
   connectModalOpen: connectModalOpen.value,
-  mounted: isMounted(),
+  mounted: isMounted.value,
   openAccountModal: openAccountModal ?? (() => {}),
   openChainModal: openChainModal ?? (() => {}),
   openConnectModal: openConnectModal ?? (() => {}),

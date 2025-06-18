@@ -3,16 +3,17 @@ import { defineProps } from 'vue';
 
 const props = defineProps<{
   label: string;
-  action?: () => void;
   icon: any;
   url?: string;
   testId?: string;
 }>();
 
+const emit = defineEmits(['action']);
+
 function handleClick(event: Event) {
-  if (!props.url && props.action) {
+  if (!props.url) {
     event.preventDefault();
-    props.action();
+    emit('action', event);
   }
 }
 </script>

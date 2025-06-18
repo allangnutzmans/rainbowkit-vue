@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, provide, inject } from 'vue';
-import { useAccount } from 'wagmi';
-import { useConnectionStatus } from '../../hooks/useConnectionStatus';
+import { ref, computed, watch } from 'vue';
+import { useAccount } from '@wagmi/vue';
+import { useConnectionStatus } from '../../composables/useConnectionStatus';
 import { isMobile } from '../../utils/isMobile';
-import { addLatestWalletId, clearLatestWalletId, getLatestWalletId } from '../../wallets/latestWalletId';
+import { addLatestWalletId, getLatestWalletId } from '../../wallets/latestWalletId';
 import { useWalletConnectors } from '../../wallets/useWalletConnectors';
-import { useConnectModal, useModalState } from '../RainbowKitProvider/ModalContext';
-import { WalletButtonContextKey } from '../RainbowKitProvider/WalletButtonContext';
+import { useConnectModal, useModalState } from '../RainbowKitPlugin/useModal';
+import { useWalletButton } from '../RainbowKitPlugin/useWalletButton';
 
 const props = defineProps<{
   wallet?: string;
@@ -15,7 +15,7 @@ const props = defineProps<{
 const walletId = computed(() => (props.wallet ?? 'rainbow').toLowerCase());
 const { openConnectModal } = useConnectModal();
 const { connectModalOpen } = useModalState();
-const walletButtonContext = inject(WalletButtonContextKey, null);
+const { connector: walletBtnConnector, setConnector: setWalletBtnConnector} = useWalletButton();
 const connectors = useWalletConnectors();
 const firstConnector = computed(() =>
   connectors
@@ -34,7 +34,7 @@ const isError = ref(false);
 const mobile = isMobile();
 
 watch(connectModalOpen, (open) => {
-  if (!open && walletButtonContext?.connector) walletButtonContext.setConnector(null);
+  if (!open && walletBtnConnector.value) setWalletBtnConnector(null);
 });
 
 const { isConnected, isConnecting } = useAccount();
@@ -73,8 +73,10 @@ const isNotSupported = computed(() =>
 function connect() {
   addLatestWalletId(firstConnector.value?.id || '');
   if (mobile || isNotSupported.value) {
-    openConnectModal?.();
-    walletButtonContext?.setConnector(firstConnector.value);
+    if (openConnectModal?.value){
+      openConnectModal.value();
+    }
+    setWalletBtnConnector(firstConnector.value);
     return;
   }
   return connectWallet();

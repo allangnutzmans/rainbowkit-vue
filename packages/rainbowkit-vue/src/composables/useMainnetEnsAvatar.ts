@@ -1,6 +1,6 @@
 import { type GetEnsNameReturnType, normalize } from 'viem/ens';
 import { useEnsAvatar } from '@wagmi/vue';
-import { mainnet } from 'vue-wagmi/chains';
+import { mainnet } from '@wagmi/vue/chains';
 import { useIsMainnetConfigured } from './useIsMainnetConfigured';
 import { computed } from 'vue';
 

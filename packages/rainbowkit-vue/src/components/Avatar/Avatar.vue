@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { useAvatarComponent } from './useAvatarComponent';
 import SpinnerIcon from '../Icons/Spinner.vue';
 import Box from "../Box/Box.vue";
+import {AvatarProps, useAvatar} from "../RainbowKitPlugin/useAvatar";
 
-interface AvatarProps {
-  address: string;
-  loading?: boolean;
-  imageUrl?: string;
-  size: number;
-}
+
 
 defineProps<AvatarProps>();
 
-const AvatarRenderer = useAvatarComponent();
+const AvatarRenderer = useAvatar();
 </script>
 
 <template>
