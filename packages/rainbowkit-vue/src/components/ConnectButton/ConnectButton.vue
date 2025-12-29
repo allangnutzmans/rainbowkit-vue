@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { mapResponsiveValue, normalizeResponsiveValue } from '../../css/sprinkles.css';
 import { touchableStyles } from '../../css/touchableStyles';
 import { useConnectionStatus } from '../../composables/useConnectionStatus';
@@ -9,7 +9,6 @@ import Avatar from '../Avatar/Avatar.vue';
 import Box from '../Box/Box.vue';
 import DropdownIcon from '../Icons/DropdownIcon.vue';
 import { useI18nContext } from '../RainbowKitPlugin/useI18nContext';
-import { useShowBalance } from '../RainbowKitPlugin/useShowBalance';
 import ConnectButtonRenderer from './ConnectButtonRenderer.vue';
 import {useRainbowKitChain} from "../RainbowKitPlugin/useRainbowKitChainContext";
 
@@ -30,21 +29,20 @@ const props = withDefaults(defineProps<{
 
 const chains = useRainbowKitChain();
 const connectionStatus = useConnectionStatus();
-const { setShowBalance } = useShowBalance();
 const ready = ref(false);
 
 const { i18n } = useI18nContext();
 
-watch(() => props.showBalance, (val) => {
-  setShowBalance(val);
-});
 onMounted(() => {
-  setShowBalance(props.showBalance);
   ready.value = true;
 });
 </script>
 
 <template>
+  {{ready ? 'true' : 'false'}}
+  <pre>
+    {{props}}
+  </pre>
   <ConnectButtonRenderer v-if="ready">
     <template #default="{
       account,

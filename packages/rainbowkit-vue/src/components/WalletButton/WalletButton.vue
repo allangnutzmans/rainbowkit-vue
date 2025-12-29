@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { touchableStyles } from '../../css/touchableStyles';
 import AsyncImage from '../AsyncImage/AsyncImage.vue';
 import Box from '../Box/Box.vue';

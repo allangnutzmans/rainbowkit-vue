@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, useSlots, inject, onMounted, ref, onUnmounted} from 'vue';
+import {computed, onMounted, ref, onUnmounted} from 'vue';
 import { useAccount, useConfig } from '@wagmi/vue';
 import { normalizeResponsiveValue } from '../../css/sprinkles.css';
 import { useProfile } from '../../composables/useProfile';
@@ -9,13 +9,11 @@ import { useAsyncImage } from '../AsyncImage/useAsyncImage';
 import { useAuthenticationStatus } from '../RainbowKitPlugin/useAuthentication';
 import { useAccountModal, useChainModal, useConnectModal, useModalState } from '../RainbowKitPlugin/useModal';
 import { useRainbowKitChainsById } from '../RainbowKitPlugin/useRainbowKitChainContext';
-import { useShowBalance } from '../RainbowKitPlugin/useShowBalance';
 import { abbreviateETHBalance } from './abbreviateETHBalance';
 import { formatAddress } from './formatAddress';
 import { formatENS } from './formatENS';
 import {showRecentTransactions} from "../../composables/useGlobal";
-
-const slots = useSlots();
+import {showBalance} from "../RainbowKitPlugin/useShowBalance";
 
 const { address, chainId } = useAccount();
 const { chains: wagmiChains } = useConfig();
@@ -26,13 +24,11 @@ const rainbowKitChain = computed(() => chainId.value ? rainbowkitChainsById.valu
 const chainName = computed(() => rainbowKitChain.value?.name ?? undefined);
 const chainIconUrl = computed(() => rainbowKitChain.value?.iconUrl ?? undefined);
 const chainIconBackground = computed(() => rainbowKitChain.value?.iconBackground ?? undefined);
-const resolvedChainIconUrl = useAsyncImage(chainIconUrl);
+const resolvedChainIconUrl = useAsyncImage(chainIconUrl.value);
 
 const hasPendingTransactions = computed(() =>
   useRecentTransactions().value.some(({ status }) => status === 'pending') && showRecentTransactions
 );
-
-const { showBalance } = useShowBalance();
 
 function computeShouldShowBalance() {
   if (typeof showBalance.value === 'boolean') {
