@@ -40,10 +40,15 @@ const RainbowKitPlugin = {
   install(app: any, options?: { config?: any }) {
     // Use provided config or fallback to default
     const config = options?.config || getDefaultConfig({
-      appName: 'RainbowKit Vue',
-      projectId: 'default',
+      appName: 'rainbowkit-vue',
+      projectId: '6a6bc9ccada2df8d6c64e6bc29a2abbe',
       chains: [mainnet, sepolia],
     });
+
+    if (!(window as any).__RAINBOWKIT_PLUGIN_INITIALIZED__) {
+      app.use(RainbowKitPlugin, { config });
+      (window as any).__RAINBOWKIT_PLUGIN_INITIALIZED__ = true;
+    }
 
     // Install VueQueryPlugin with a default queryClient if not already installed
     if (!app._context.provides['VUE_QUERY_CLIENT']) {
@@ -99,6 +104,8 @@ const RainbowKitPlugin = {
         useFingerprint();
       }
     });
+
+
   },
 };
 
